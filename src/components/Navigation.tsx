@@ -45,6 +45,12 @@ const mainFeatures: NavigationItem[] = [
     icon: "🌐",
   },
   {
+    title: "AI Documentation",
+    description: "Generate and maintain documentation with AI",
+    href: "/ai-features/documentation",
+    icon: "📚",
+  },
+  {
     title: "Getting Started",
     description: "Learn the basics of Cursor AI and set up your environment",
     href: "/getting-started",
@@ -68,6 +74,12 @@ const mainFeatures: NavigationItem[] = [
     description: "Explore real-world examples and best practices",
     href: "/examples",
     icon: "📚",
+  },
+  {
+    title: "Code Refactoring",
+    description: "Transform and optimize your code with AI",
+    href: "/ai-features/code-refactoring",
+    icon: "🔄",
   },
 ];
 

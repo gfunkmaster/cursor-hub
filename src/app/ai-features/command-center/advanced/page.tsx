@@ -3,110 +3,146 @@ import Link from "next/link";
 import {
   ArrowLeftIcon,
   BeakerIcon,
+  SparklesIcon,
   CommandLineIcon,
-  LightBulbIcon,
-  CodeBracketIcon,
+  ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 
 const AdvancedTechniquesPage: FC = () => {
   const advancedPatterns = [
     {
-      title: "Chain Commands",
-      description: "Combine multiple commands for complex transformations",
-      example: {
-        steps: [
-          "Convert this to TypeScript",
-          "Add error handling",
-          "Generate unit tests",
-        ],
-        explanation: "Chain commands to progressively enhance your code",
-      },
-      icon: <CommandLineIcon className="w-5 h-5" />,
-    },
-    {
-      title: "Context-Aware Refactoring",
-      description: "Use project context for smarter code changes",
-      example: {
-        steps: [
-          "Refactor to match the pattern in UserService",
-          "Update types based on the API schema",
-          "Add logging consistent with the project",
-        ],
-        explanation: "Leverage existing patterns and conventions",
-      },
-      icon: <BeakerIcon className="w-5 h-5" />,
-    },
-    {
-      title: "Smart Code Generation",
-      description: "Generate code that integrates with your codebase",
-      example: {
-        steps: [
-          "Create a component using our design system",
-          "Add state management with our store pattern",
-          "Include our standard error boundaries",
-        ],
-        explanation: "Generate code that follows project patterns",
-      },
-      icon: <CodeBracketIcon className="w-5 h-5" />,
-    },
-  ];
-
-  const advancedFeatures = [
-    {
-      title: "Custom Code Templates",
-      description: "Create reusable templates for common patterns",
-      steps: [
-        "Define template with placeholders",
-        "Use variables for dynamic content",
-        "Apply consistent styling and patterns",
+      title: "AI-Driven Refactoring",
+      description: "Complex codebase transformations using AI",
+      examples: [
+        {
+          scenario: "Pattern Migration",
+          command:
+            "Analyze this component and suggest modern React patterns to replace legacy code",
+          explanation:
+            "AI identifies outdated patterns and suggests modern alternatives",
+        },
+        {
+          scenario: "Architecture Transformation",
+          command:
+            "Convert this MVC structure to use the repository pattern with dependency injection",
+          explanation:
+            "AI handles complex architectural changes while maintaining functionality",
+        },
       ],
     },
     {
-      title: "Batch Operations",
-      description: "Apply similar changes across multiple files",
-      steps: [
-        "Select files or patterns",
-        "Define transformation rules",
-        "Preview and apply changes",
+      title: "Multi-Step AI Workflows",
+      description: "Breaking down complex tasks into AI-guided steps",
+      examples: [
+        {
+          scenario: "Feature Implementation",
+          command:
+            "1. First, create a data model for user preferences\n2. Then, generate CRUD endpoints\n3. Finally, add caching layer",
+          explanation:
+            "AI maintains context between steps for coherent implementation",
+        },
+        {
+          scenario: "Testing Strategy",
+          command:
+            "1. Generate unit tests for core functions\n2. Add integration tests for API flows\n3. Create E2E test scenarios",
+          explanation: "AI builds comprehensive test coverage incrementally",
+        },
       ],
     },
     {
-      title: "Integration Workflows",
-      description: "Combine AI with your development workflow",
-      steps: [
-        "Code review assistance",
-        "Documentation generation",
-        "Test coverage analysis",
+      title: "Context-Aware Generation",
+      description: "Leveraging project context for smarter AI outputs",
+      examples: [
+        {
+          scenario: "Style Matching",
+          command:
+            "Create a new component following the styling patterns from ThemeProvider",
+          explanation: "AI analyzes existing styles and maintains consistency",
+        },
+        {
+          scenario: "Error Handling",
+          command:
+            "Add error handling following our custom ErrorBoundary pattern",
+          explanation:
+            "AI replicates project-specific error handling approaches",
+        },
       ],
     },
   ];
 
-  const powerUserTips = [
+  const aiTechniques = [
     {
-      title: "Project-Wide Refactoring",
-      description: "Safely refactor code across your entire project",
-      commands: [
-        "Update all API endpoints to new format",
-        "Migrate components to TypeScript",
-        "Standardize error handling across services",
+      title: "Pattern Recognition",
+      description: "Help AI learn from your codebase",
+      steps: [
+        "Keep consistent naming conventions",
+        "Maintain clear file structure",
+        "Document key patterns explicitly",
+        "Use typed interfaces consistently",
+      ],
+      icon: <BeakerIcon className="w-6 h-6" />,
+    },
+    {
+      title: "Context Management",
+      description: "Optimize AI's understanding of context",
+      steps: [
+        "Keep relevant files open",
+        "Reference specific components",
+        "Mention architectural decisions",
+        "Include business logic context",
+      ],
+      icon: <SparklesIcon className="w-6 h-6" />,
+    },
+    {
+      title: "Iterative Development",
+      description: "Refine AI outputs effectively",
+      steps: [
+        "Start with broad commands",
+        "Refine with specific requirements",
+        "Request targeted improvements",
+        "Validate and iterate",
+      ],
+      icon: <CommandLineIcon className="w-6 h-6" />,
+    },
+    {
+      title: "Code Evolution",
+      description: "Guide AI in evolving your codebase",
+      steps: [
+        "Identify improvement areas",
+        "Plan incremental changes",
+        "Maintain backwards compatibility",
+        "Document transformations",
+      ],
+      icon: <ArrowPathIcon className="w-6 h-6" />,
+    },
+  ];
+
+  const bestPractices = [
+    {
+      title: "Maximize AI Context",
+      tips: [
+        "Keep related files open in editor",
+        "Reference specific file locations",
+        "Mention relevant dependencies",
+        "Include business requirements",
       ],
     },
     {
-      title: "Code Analysis",
-      description: "Get deep insights into your code",
-      commands: [
-        "Analyze performance bottlenecks",
-        "Find security vulnerabilities",
-        "Identify code duplication",
+      title: "Structured Commands",
+      tips: [
+        "Use clear, specific language",
+        "Break down complex requests",
+        "Include acceptance criteria",
+        "Specify edge cases",
       ],
     },
     {
-      title: "Architecture Assistance",
-      description: "Get help with architectural decisions",
-      commands: [
-        "Suggest optimal data structures",
-        "Recommend design patterns",
-        "Evaluate trade-offs",
+      title: "Quality Control",
+      tips: [
+        "Review AI-generated code thoroughly",
+        "Test edge cases explicitly",
+        "Validate business logic",
+        "Check performance implications",
       ],
     },
   ];
@@ -122,70 +158,37 @@ const AdvancedTechniquesPage: FC = () => {
       </Link>
 
       <div className="mb-16">
-        <h1 className="text-4xl font-bold mb-4">Advanced Techniques</h1>
+        <h1 className="text-4xl font-bold mb-4">Advanced AI Techniques</h1>
         <p className="text-xl text-muted-foreground">
-          Master advanced patterns and techniques to unlock the full potential
-          of Cursor AI
+          Master advanced patterns for AI-first development with Cursor
         </p>
       </div>
 
       {/* Advanced Patterns */}
       <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-6">
-          Advanced Command Patterns
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <h2 className="text-2xl font-semibold mb-6">Advanced AI Patterns</h2>
+        <div className="space-y-8">
           {advancedPatterns.map((pattern) => (
             <div
               key={pattern.title}
-              className="bg-background/50 p-6 rounded-lg space-y-4"
+              className="bg-background/50 p-6 rounded-lg space-y-6"
             >
-              <div className="flex items-center gap-2">
-                <div className="text-primary">{pattern.icon}</div>
-                <h3 className="font-semibold">{pattern.title}</h3>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">{pattern.title}</h3>
+                <p className="text-muted-foreground">{pattern.description}</p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                {pattern.description}
-              </p>
-              <div className="space-y-2">
-                <div className="bg-black/90 p-3 rounded space-y-2">
-                  {pattern.example.steps.map((step, index) => (
-                    <div key={step} className="flex items-start gap-2">
-                      <span className="text-primary text-sm">{index + 1}.</span>
-                      <code className="text-sm text-green-400">{step}</code>
+              <div className="grid md:grid-cols-2 gap-6">
+                {pattern.examples.map((example) => (
+                  <div key={example.scenario} className="space-y-3">
+                    <h4 className="font-medium text-sm">{example.scenario}</h4>
+                    <div className="bg-black/90 p-3 rounded">
+                      <code className="text-sm text-green-400 whitespace-pre-wrap">
+                        {example.command}
+                      </code>
                     </div>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {pattern.example.explanation}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Advanced Features */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-6">Advanced Features</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {advancedFeatures.map((feature) => (
-            <div
-              key={feature.title}
-              className="bg-background/50 p-6 rounded-lg space-y-4"
-            >
-              <h3 className="font-semibold">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {feature.description}
-              </p>
-              <div className="space-y-2">
-                {feature.steps.map((step) => (
-                  <div
-                    key={step}
-                    className="flex items-center gap-2 text-sm text-muted-foreground"
-                  >
-                    <LightBulbIcon className="w-4 h-4 text-primary" />
-                    <span>{step}</span>
+                    <p className="text-sm text-muted-foreground">
+                      {example.explanation}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -194,24 +197,55 @@ const AdvancedTechniquesPage: FC = () => {
         </div>
       </section>
 
-      {/* Power User Tips */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-6">Power User Tips</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {powerUserTips.map((tip) => (
+      {/* AI Techniques */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold mb-6">
+          AI Optimization Techniques
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {aiTechniques.map((technique) => (
             <div
-              key={tip.title}
+              key={technique.title}
               className="bg-background/50 p-6 rounded-lg space-y-4"
             >
-              <h3 className="font-semibold">{tip.title}</h3>
-              <p className="text-sm text-muted-foreground">{tip.description}</p>
-              <div className="bg-black/90 p-3 rounded space-y-2">
-                {tip.commands.map((command) => (
-                  <code key={command} className="block text-sm text-green-400">
-                    {command}
-                  </code>
-                ))}
+              <div className="flex items-center gap-2">
+                <div className="text-primary">{technique.icon}</div>
+                <h3 className="font-semibold">{technique.title}</h3>
               </div>
+              <p className="text-sm text-muted-foreground">
+                {technique.description}
+              </p>
+              <ul className="space-y-2">
+                {technique.steps.map((step) => (
+                  <li key={step} className="flex items-start gap-2 text-sm">
+                    <SparklesIcon className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Best Practices */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-6">Advanced Best Practices</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {bestPractices.map((practice) => (
+            <div
+              key={practice.title}
+              className="bg-background/50 p-6 rounded-lg space-y-4"
+            >
+              <h3 className="font-semibold">{practice.title}</h3>
+              <ul className="space-y-2">
+                {practice.tips.map((tip) => (
+                  <li key={tip} className="flex items-start gap-2 text-sm">
+                    <CommandLineIcon className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
