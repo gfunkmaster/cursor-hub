@@ -15,6 +15,36 @@ interface NavigationItem {
 
 const mainFeatures: NavigationItem[] = [
   {
+    title: "AI Command Center",
+    description: "Master Cursor's AI-powered features and commands",
+    href: "/ai-features/command-center",
+    icon: "🤖",
+  },
+  {
+    title: "AI Chat Interface",
+    description: "Learn to have effective conversations with Cursor AI",
+    href: "/ai-features/chat-interface",
+    icon: "💬",
+  },
+  {
+    title: "Code Generation",
+    description: "Generate high-quality code with AI assistance",
+    href: "/ai-features/code-generation",
+    icon: "✨",
+  },
+  {
+    title: "Intelligent Completion",
+    description: "Experience context-aware code completion",
+    href: "/ai-features/code-completion",
+    icon: "⚡",
+  },
+  {
+    title: "Language Support",
+    description: "Explore supported languages and frameworks",
+    href: "/ai-features/language-support",
+    icon: "🌐",
+  },
+  {
     title: "Getting Started",
     description: "Learn the basics of Cursor AI and set up your environment",
     href: "/getting-started",

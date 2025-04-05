@@ -8,6 +8,11 @@ import {
   EyeIcon,
   CodeBracketIcon,
   AdjustmentsHorizontalIcon,
+  QuestionMarkCircleIcon,
+  InformationCircleIcon,
+  ChevronRightIcon,
+  ExclamationCircleIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/outline";
 
 interface ConfigOption {
@@ -18,6 +23,14 @@ interface ConfigOption {
   defaultValue: any;
   description: string;
   preview?: string;
+  tooltip?: string;
+  validation?: {
+    required?: boolean;
+    min?: number;
+    max?: number;
+    pattern?: RegExp;
+    message?: string;
+  };
 }
 
 interface ConfigSection {
@@ -38,6 +51,12 @@ const configSections: ConfigSection[] = [
         options: ["next-app", "react-app", "node-api", "library"],
         defaultValue: "next-app",
         description: "The type of project you're working on",
+        tooltip:
+          "Select your project type to get optimized AI suggestions and configurations",
+        validation: {
+          required: true,
+          message: "Project type is required for proper AI context",
+        },
       },
       {
         key: "project.typescript",
@@ -45,6 +64,8 @@ const configSections: ConfigSection[] = [
         type: "boolean",
         defaultValue: true,
         description: "Whether the project uses TypeScript",
+        tooltip:
+          "TypeScript provides better type safety and improves AI code generation accuracy",
       },
       {
         key: "project.strictMode",
@@ -52,6 +73,7 @@ const configSections: ConfigSection[] = [
         type: "boolean",
         defaultValue: true,
         description: "Enable strict type checking",
+        tooltip: "Recommended for better type safety and code quality",
       },
     ],
   },
@@ -66,6 +88,8 @@ const configSections: ConfigSection[] = [
         options: ["minimal", "balanced", "comprehensive"],
         defaultValue: "balanced",
         description: "How much context to include in AI requests",
+        tooltip:
+          "Controls how much surrounding code context Cursor AI considers",
         preview:
           "// Example context strategy impact:\nminimal: Current file only\nbalanced: Related files + types\ncomprehensive: Full feature context",
       },
@@ -169,8 +193,48 @@ const configSections: ConfigSection[] = [
   },
 ];
 
+interface StepIndicatorProps {
+  currentStep: number;
+  totalSteps: number;
+}
+
+const StepIndicator: FC<StepIndicatorProps> = ({ currentStep, totalSteps }) => (
+  <div className="flex items-center gap-2 mb-6">
+    {Array.from({ length: totalSteps }).map((_, index) => (
+      <div key={index} className="flex items-center">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+            index < currentStep
+              ? "bg-green-500 text-white"
+              : index === currentStep
+              ? "bg-primary text-white"
+              : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          {index + 1}
+        </div>
+        {index < totalSteps - 1 && (
+          <ChevronRightIcon className="w-4 h-4 text-gray-400 mx-2" />
+        )}
+      </div>
+    ))}
+  </div>
+);
+
 const ConfigGenerator: FC = () => {
-  const [config, setConfig] = useState<Record<string, any>>({});
+  const [config, setConfig] = useState<Record<string, any>>(() => {
+    const initialConfig: Record<string, any> = {};
+    configSections.forEach((section) => {
+      section.fields.forEach((field) => {
+        const [mainKey, subKey] = field.key.split(".");
+        if (!initialConfig[mainKey]) {
+          initialConfig[mainKey] = {};
+        }
+        initialConfig[mainKey][subKey] = field.defaultValue;
+      });
+    });
+    return initialConfig;
+  });
   const [copied, setCopied] = useState(false);
   const [activePreview, setActivePreview] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState(0);
@@ -178,25 +242,80 @@ const ConfigGenerator: FC = () => {
     Record<string, string>
   >({});
   const [showPreview, setShowPreview] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [configStatus, setConfigStatus] = useState<{
+    isValid: boolean;
+    message: string;
+  }>({ isValid: false, message: "Required fields missing" });
+  const [currentStep, setCurrentStep] = useState(0);
+  const totalSteps = configSections.length;
 
   const validateConfig = (newConfig: Record<string, any>) => {
     const errors: Record<string, string> = {};
+    let isValid = true;
+    let statusMessage = "Configuration is valid";
+    let completedSteps = 0;
 
-    // Validate required fields
-    if (!newConfig.project?.type) {
-      errors["project.type"] = "Project type is required";
-    }
+    // Validate all fields with validation rules
+    configSections.forEach((section, sectionIndex) => {
+      let sectionValid = true;
+      section.fields.forEach((field) => {
+        const value =
+          newConfig[field.key.split(".")[0]]?.[field.key.split(".")[1]];
 
-    // Validate context lines
-    if (
-      newConfig.ai?.contextLines &&
-      (newConfig.ai.contextLines < 10 || newConfig.ai.contextLines > 200)
-    ) {
-      errors["ai.contextLines"] = "Context lines should be between 10 and 200";
+        if (field.validation) {
+          if (field.validation.required && !value) {
+            errors[field.key] =
+              field.validation.message || "This field is required";
+            sectionValid = false;
+            isValid = false;
+          }
+
+          if (
+            field.validation.min !== undefined &&
+            value < field.validation.min
+          ) {
+            errors[
+              field.key
+            ] = `Value must be at least ${field.validation.min}`;
+            sectionValid = false;
+            isValid = false;
+          }
+
+          if (
+            field.validation.max !== undefined &&
+            value > field.validation.max
+          ) {
+            errors[field.key] = `Value must be at most ${field.validation.max}`;
+            sectionValid = false;
+            isValid = false;
+          }
+
+          if (
+            field.validation.pattern &&
+            !field.validation.pattern.test(value)
+          ) {
+            errors[field.key] = field.validation.message || "Invalid format";
+            sectionValid = false;
+            isValid = false;
+          }
+        }
+      });
+
+      if (sectionValid) {
+        completedSteps++;
+      }
+    });
+
+    if (!isValid) {
+      statusMessage = `Please fix validation errors (${completedSteps}/${totalSteps} sections complete)`;
+    } else {
+      statusMessage = `Configuration is valid (${completedSteps}/${totalSteps} sections complete)`;
     }
 
     setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+    setConfigStatus({ isValid, message: statusMessage });
+    return isValid;
   };
 
   const handleChange = (key: string, value: any) => {
@@ -261,151 +380,206 @@ const ConfigGenerator: FC = () => {
   };
 
   const renderField = (field: ConfigOption) => {
-    const value = config[field.key] || field.defaultValue;
+    const [mainKey, subKey] = field.key.split(".");
+    const value = config[mainKey]?.[subKey] ?? field.defaultValue;
+    const hasError = !!validationErrors[field.key];
 
-    switch (field.type) {
-      case "select":
-        return (
-          <select
-            className="w-full rounded-md border border-border bg-background px-3 py-2"
-            value={value}
-            onChange={(e) => handleChange(field.key, e.target.value)}
-          >
-            {field.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        );
-      case "boolean":
-        return (
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              className="rounded border-border"
-              checked={value}
-              onChange={(e) => handleChange(field.key, e.target.checked)}
-            />
-            <span className="text-sm text-muted-foreground">Enabled</span>
+    return (
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-2">
+          <label className="block text-sm font-medium">
+            {field.label}
+            {field.validation?.required && (
+              <span className="text-red-500 ml-1">*</span>
+            )}
           </label>
-        );
-      case "array":
-        return (
-          <div className="space-y-2">
-            {value.map((item: string, index: number) => (
-              <div key={index} className="flex gap-2">
-                <input
-                  type="text"
-                  className="flex-1 rounded-md border border-border bg-background px-3 py-2"
-                  value={item}
-                  onChange={(e) => {
-                    const newValue = [...value];
-                    newValue[index] = e.target.value;
-                    handleChange(field.key, newValue);
-                  }}
-                />
-                <button
-                  className="px-2 py-1 text-red-500 hover:bg-red-500/10 rounded"
-                  onClick={() => {
-                    const newValue = value.filter(
-                      (_: any, i: number) => i !== index
-                    );
-                    handleChange(field.key, newValue);
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
+          {field.tooltip && (
             <button
-              className="text-sm text-primary hover:text-primary/80"
-              onClick={() => handleChange(field.key, [...value, ""])}
+              className="text-gray-400 hover:text-gray-600"
+              onMouseEnter={() => setActiveTooltip(field.key)}
+              onMouseLeave={() => setActiveTooltip(null)}
             >
-              + Add Pattern
+              <QuestionMarkCircleIcon className="w-4 h-4" />
             </button>
+          )}
+        </div>
+        {activeTooltip === field.key && (
+          <div className="absolute z-10 bg-black text-white p-2 rounded text-sm max-w-xs">
+            {field.tooltip}
           </div>
-        );
-      default:
-        return (
-          <input
-            type={field.type}
-            className="w-full rounded-md border border-border bg-background px-3 py-2"
-            value={value}
-            onChange={(e) => handleChange(field.key, e.target.value)}
-          />
-        );
+        )}
+        <div className={`${hasError ? "border-red-500" : "border-border"}`}>
+          {field.type === "select" ? (
+            <select
+              className="w-full rounded-md border border-border bg-background px-3 py-2"
+              value={value}
+              onChange={(e) => handleChange(field.key, e.target.value)}
+            >
+              {field.options?.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          ) : field.type === "boolean" ? (
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                className="rounded border-border"
+                checked={value}
+                onChange={(e) => handleChange(field.key, e.target.checked)}
+              />
+              <span className="text-sm text-muted-foreground">Enabled</span>
+            </label>
+          ) : field.type === "array" ? (
+            <div className="space-y-2">
+              {(value || []).map((item: string, index: number) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="text"
+                    className="flex-1 rounded-md border border-border bg-background px-3 py-2"
+                    value={item}
+                    onChange={(e) => {
+                      const newValue = [...(value || [])];
+                      newValue[index] = e.target.value;
+                      handleChange(field.key, newValue);
+                    }}
+                  />
+                  <button
+                    className="px-2 py-1 text-red-500 hover:bg-red-500/10 rounded"
+                    onClick={() => {
+                      const newValue = (value || []).filter(
+                        (_: any, i: number) => i !== index
+                      );
+                      handleChange(field.key, newValue);
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                className="text-sm text-primary hover:text-primary/80"
+                onClick={() => handleChange(field.key, [...(value || []), ""])}
+              >
+                + Add Pattern
+              </button>
+            </div>
+          ) : (
+            <input
+              type={field.type}
+              className="w-full rounded-md border border-border bg-background px-3 py-2"
+              value={value}
+              onChange={(e) => handleChange(field.key, e.target.value)}
+            />
+          )}
+        </div>
+        {hasError && (
+          <p className="text-red-500 text-sm mt-1">
+            {validationErrors[field.key]}
+          </p>
+        )}
+        <p className="text-sm text-gray-500 mt-1">{field.description}</p>
+      </div>
+    );
+  };
+
+  const handleNext = () => {
+    const sectionValid = configSections[currentStep].fields.every(
+      (field) => !validationErrors[field.key]
+    );
+
+    if (sectionValid && currentStep < totalSteps - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
     }
   };
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-end space-x-4 mb-6">
-        <label className="cursor-pointer px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
-          Import Config
-          <input
-            type="file"
-            accept=".json"
-            onChange={importConfig}
-            className="hidden"
-          />
-        </label>
-        <button
-          onClick={() => setShowPreview(!showPreview)}
-          className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90"
-        >
-          {showPreview ? "Hide Preview" : "Show Preview"}
-        </button>
-        <button
-          onClick={downloadConfig}
-          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
-          disabled={Object.keys(validationErrors).length > 0}
-        >
-          Download Config
-        </button>
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center gap-2">
+          {configStatus.isValid ? (
+            <CheckCircleIcon className="w-5 h-5 text-green-500" />
+          ) : (
+            <ExclamationCircleIcon className="w-5 h-5 text-yellow-500" />
+          )}
+          <span
+            className={`text-sm ${
+              configStatus.isValid ? "text-green-500" : "text-yellow-500"
+            }`}
+          >
+            {configStatus.message}
+          </span>
+        </div>
+        <div className="flex space-x-4">
+          <label className="cursor-pointer px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+            Import Config
+            <input
+              type="file"
+              accept=".json"
+              onChange={importConfig}
+              className="hidden"
+            />
+          </label>
+          <button
+            onClick={() => setShowPreview(!showPreview)}
+            className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90"
+          >
+            {showPreview ? "Hide Preview" : "Show Preview"}
+          </button>
+          <button
+            onClick={downloadConfig}
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+            disabled={Object.keys(validationErrors).length > 0}
+          >
+            Download Config
+          </button>
+        </div>
       </div>
+
+      <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
-          <div className="flex space-x-4 mb-6">
-            {configSections.map((section, index) => (
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-semibold text-primary">
+              {configSections[currentStep].title}
+            </h3>
+            <div className="flex gap-2">
               <button
-                key={section.title}
-                onClick={() => setSelectedSection(index)}
-                className={`px-4 py-2 rounded ${
-                  selectedSection === index
-                    ? "bg-primary text-white"
-                    : "bg-gray-200"
-                }`}
+                onClick={handlePrevious}
+                disabled={currentStep === 0}
+                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
               >
-                <div className="flex items-center space-x-2">
-                  {section.icon}
-                  <span>{section.title}</span>
-                </div>
+                Previous
               </button>
-            ))}
+              <button
+                onClick={handleNext}
+                disabled={currentStep === totalSteps - 1}
+                className="px-4 py-2 rounded bg-primary text-white hover:bg-primary/90 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
 
           <div className="space-y-6">
-            {configSections[selectedSection].fields.map((field) => (
+            {configSections[currentStep].fields.map((field) => (
               <div key={field.key} className="space-y-2">
-                <label className="block text-sm font-medium">
-                  {field.label}
-                  {validationErrors[field.key] && (
-                    <span className="text-red-500 ml-2">
-                      {validationErrors[field.key]}
-                    </span>
-                  )}
-                </label>
                 {renderField(field)}
-                <p className="text-sm text-gray-500">{field.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {showPreview && (
-          <div className="bg-gray-900 p-6 rounded-lg">
+          <div className="bg-gray-900 p-6 rounded-lg sticky top-4">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-white">
                 Configuration Preview
@@ -422,7 +596,7 @@ const ConfigGenerator: FC = () => {
                 )}
               </button>
             </div>
-            <pre className="text-green-400 text-sm overflow-auto">
+            <pre className="text-green-400 text-sm overflow-auto max-h-[600px]">
               {JSON.stringify(config, null, 2)}
             </pre>
           </div>
