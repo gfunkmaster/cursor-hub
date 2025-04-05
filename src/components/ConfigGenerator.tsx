@@ -174,6 +174,30 @@ const ConfigGenerator: FC = () => {
   const [copied, setCopied] = useState(false);
   const [activePreview, setActivePreview] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState(0);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
+  const [showPreview, setShowPreview] = useState(false);
+
+  const validateConfig = (newConfig: Record<string, any>) => {
+    const errors: Record<string, string> = {};
+
+    // Validate required fields
+    if (!newConfig.project?.type) {
+      errors["project.type"] = "Project type is required";
+    }
+
+    // Validate context lines
+    if (
+      newConfig.ai?.contextLines &&
+      (newConfig.ai.contextLines < 10 || newConfig.ai.contextLines > 200)
+    ) {
+      errors["ai.contextLines"] = "Context lines should be between 10 and 200";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (key: string, value: any) => {
     setConfig((prev) => {
@@ -188,14 +212,52 @@ const ConfigGenerator: FC = () => {
         current = current[keys[i]];
       }
       current[keys[keys.length - 1]] = value;
+
+      validateConfig(newConfig);
       return newConfig;
     });
   };
 
   const copyConfig = async () => {
-    await navigator.clipboard.writeText(JSON.stringify(config, null, 2));
+    const configString = JSON.stringify(config, null, 2);
+    await navigator.clipboard.writeText(configString);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadConfig = () => {
+    if (!validateConfig(config)) {
+      alert("Please fix validation errors before downloading");
+      return;
+    }
+
+    const configString = JSON.stringify(config, null, 2);
+    const blob = new Blob([configString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = ".cursor-config.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const importConfig = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target?.result as string);
+        setConfig(imported);
+        validateConfig(imported);
+      } catch (error) {
+        alert("Invalid configuration file");
+      }
+    };
+    reader.readAsText(file);
   };
 
   const renderField = (field: ConfigOption) => {
@@ -278,128 +340,93 @@ const ConfigGenerator: FC = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex gap-4 overflow-x-auto pb-4">
-        {configSections.map((section, index) => (
-          <button
-            key={section.title}
-            onClick={() => setSelectedSection(index)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              selectedSection === index
-                ? "bg-primary text-white"
-                : "bg-background/50 hover:bg-background/80"
-            }`}
-          >
-            {section.icon}
-            <span>{section.title}</span>
-          </button>
-        ))}
+      <div className="flex justify-end space-x-4 mb-6">
+        <label className="cursor-pointer px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+          Import Config
+          <input
+            type="file"
+            accept=".json"
+            onChange={importConfig}
+            className="hidden"
+          />
+        </label>
+        <button
+          onClick={() => setShowPreview(!showPreview)}
+          className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90"
+        >
+          {showPreview ? "Hide Preview" : "Show Preview"}
+        </button>
+        <button
+          onClick={downloadConfig}
+          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+          disabled={Object.keys(validationErrors).length > 0}
+        >
+          Download Config
+        </button>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
-        <motion.div
-          key={selectedSection}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-background/50 backdrop-blur-sm rounded-lg p-6 shadow-lg"
-        >
-          <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
-            {configSections[selectedSection].icon}
-            {configSections[selectedSection].title}
-          </h3>
-          <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <div className="flex space-x-4 mb-6">
+            {configSections.map((section, index) => (
+              <button
+                key={section.title}
+                onClick={() => setSelectedSection(index)}
+                className={`px-4 py-2 rounded ${
+                  selectedSection === index
+                    ? "bg-primary text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  {section.icon}
+                  <span>{section.title}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-6">
             {configSections[selectedSection].fields.map((field) => (
               <div key={field.key} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="block text-sm font-medium text-foreground">
-                    {field.label}
-                    <span className="text-xs text-muted-foreground ml-2">
-                      ({field.description})
+                <label className="block text-sm font-medium">
+                  {field.label}
+                  {validationErrors[field.key] && (
+                    <span className="text-red-500 ml-2">
+                      {validationErrors[field.key]}
                     </span>
-                  </label>
-                  {field.preview && (
-                    <button
-                      onClick={() =>
-                        setActivePreview(
-                          activePreview === field.key ? null : field.key
-                        )
-                      }
-                      className={`p-1 rounded hover:bg-accent/10 ${
-                        activePreview === field.key
-                          ? "text-primary"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      <EyeIcon className="w-4 h-4" />
-                    </button>
                   )}
-                </div>
-                {activePreview === field.key && field.preview && (
-                  <pre className="text-xs bg-black/90 p-3 rounded-md text-green-400 mt-2">
-                    {field.preview}
-                  </pre>
-                )}
+                </label>
                 {renderField(field)}
+                <p className="text-sm text-gray-500">{field.description}</p>
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        <div className="space-y-6">
-          <div className="bg-black/90 rounded-lg p-6">
+        {showPreview && (
+          <div className="bg-gray-900 p-6 rounded-lg">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-white">
-                Generated Configuration
+                Configuration Preview
               </h3>
               <button
                 onClick={copyConfig}
-                className="px-4 py-2 rounded-md bg-primary text-white text-sm hover:bg-primary/90 transition-colors flex items-center gap-2"
+                className="text-white hover:text-primary"
+                title="Copy to clipboard"
               >
                 {copied ? (
-                  <CheckIcon className="w-4 h-4" />
+                  <CheckIcon className="w-5 h-5" />
                 ) : (
-                  <ClipboardIcon className="w-4 h-4" />
+                  <ClipboardIcon className="w-5 h-5" />
                 )}
-                {copied ? "Copied!" : "Copy"}
               </button>
             </div>
-            <pre className="text-green-400 text-sm overflow-x-auto">
+            <pre className="text-green-400 text-sm overflow-auto">
               {JSON.stringify(config, null, 2)}
             </pre>
           </div>
-
-          <div className="bg-background/50 backdrop-blur-sm rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-primary mb-3">
-              Configuration Impact
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Your current configuration optimizes for:
-            </p>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4 text-green-500" />
-                {config.ai?.contextStrategy === "comprehensive"
-                  ? "Maximum context awareness"
-                  : config.ai?.contextStrategy === "minimal"
-                  ? "Fast, focused responses"
-                  : "Balanced context and performance"}
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4 text-green-500" />
-                {config.ai?.codeGeneration === "tested"
-                  ? "Fully tested code generation"
-                  : config.ai?.codeGeneration === "documented"
-                  ? "Well-documented code"
-                  : "Basic implementation with types"}
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckIcon className="w-4 h-4 text-green-500" />
-                {config.ai?.autoSuggest
-                  ? "Proactive code suggestions"
-                  : "Manual code assistance"}
-              </li>
-            </ul>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

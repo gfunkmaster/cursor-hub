@@ -80,7 +80,7 @@ export const guides: NavigationItem[] = [
   },
   {
     title: "Troubleshooting",
-    description: "Common issues and how to resolve them",
+    description: "Common issues and solutions",
     href: "/guides/troubleshooting",
     icon: "🔧",
   },
@@ -101,6 +101,30 @@ export const guides: NavigationItem[] = [
     description: "Enhance Cursor AI with recommended extensions",
     href: "/guides/recommended-extensions",
     icon: "🔌",
+  },
+  {
+    title: "Complex Features",
+    description: "Interactive demos of advanced Cursor AI features",
+    href: "/guides/complex-features",
+    icon: "🔥",
+  },
+  {
+    title: "Common Templates",
+    description: "Ready-to-use templates for common use cases",
+    href: "/guides/templates",
+    icon: "📋",
+  },
+  {
+    title: "Performance Guide",
+    description: "Optimize your Cursor AI workflow",
+    href: "/guides/performance",
+    icon: "⚡",
+  },
+  {
+    title: "Security Guide",
+    description: "Best practices for secure development",
+    href: "/guides/security",
+    icon: "🔒",
   },
 ];
 
