@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cursor AI Hub
 
-## Getting Started
+A comprehensive guide and resource center for mastering Cursor AI - Your AI-powered development companion.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Interactive Getting Started Guide**: Step-by-step introduction to Cursor AI
+- **Best Practices & Tips**: Learn how to write effective prompts and optimize your workflow
+- **Keyboard Shortcuts**: Master all the essential shortcuts
+- **Project Templates**: Ready-to-use project structures and configurations
+- **Advanced Guides**: Deep dives into advanced features and techniques
+- **Search Functionality**: Quickly find the information you need
+- **Responsive Design**: Works great on all devices
+
+## 🛠 Tech Stack
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Heroicons
+- Headless UI
+
+## 🏃‍♂️ Getting Started
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/gfunkmaster/cursor-hub.git
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   cd cursor-hub
+   npm install
+   ```
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                  # Next.js app directory
+├── components/           # Reusable components
+├── lib/                  # Utility functions and helpers
+└── types/               # TypeScript type definitions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🎯 Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Interactive Tutorials**: Learn by doing with our step-by-step guides
+- **Search Integration**: Find exactly what you need quickly
+- **Customizable Navigation**: Collapsible sidebar for better focus
+- **Modern UI/UX**: Beautiful, responsive design with smooth animations
+- **TypeScript Support**: Full type safety throughout the application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🤝 Contributing
 
-## Learn More
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-To learn more about Next.js, take a look at the following resources:
+## 📝 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🙏 Acknowledgments
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Cursor AI team for the amazing tool
+- All contributors and community members
+- Next.js team for the fantastic framework

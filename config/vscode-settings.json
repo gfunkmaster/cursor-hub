@@ -1,0 +1,99 @@
+{
+  // Editor Settings
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true,
+    "source.addMissingImports": true
+  },
+  "editor.suggestSelection": "first",
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.linkedEditing": true,
+  "editor.stickyScroll.enabled": true,
+
+  // Cursor AI Settings
+  "cursor.experimental.askOnSave": false,
+  "cursor.prompt.language": "en",
+  "cursor.codeLens.enabled": true,
+  "cursor.inferredLanguageSupport": true,
+  "cursor.experimental.commentPrefix": "// ✨Cursor:",
+  "cursor.features.copilot": true,
+  "cursor.features.chat": true,
+  "cursor.features.snippets": true,
+
+  // File Settings
+  "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // TypeScript Settings
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.suggest.autoImports": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
+  // ESLint Settings
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true,
+
+  // Git Settings
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.enableCommitSigning": true,
+
+  // Terminal Settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "terminal.integrated.fontSize": 12,
+
+  // Workbench Settings
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.editor.enablePreview": false,
+  "workbench.startupEditor": "none",
+
+  // Extension-specific settings
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.semi": true,
+  "prettier.printWidth": 80,
+
+  // Todo Tree Settings
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]",
+    "✨Cursor:"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "✨Cursor:": {
+      "icon": "zap",
+      "foreground": "#fff",
+      "background": "#8B5CF6",
+      "iconColour": "#8B5CF6"
+    }
+  }
+} 

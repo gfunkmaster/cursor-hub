@@ -1,0 +1,45 @@
+{
+  "project": {
+    "name": "Cursor AI Hub",
+    "description": "A comprehensive guide and learning hub for Cursor AI",
+    "version": "1.0.0"
+  },
+  "style": {
+    "preferredQuotes": "double",
+    "maxLineLength": 80,
+    "indentSize": 2,
+    "typescript": true
+  },
+  "conventions": {
+    "components": {
+      "location": "src/components",
+      "naming": "PascalCase",
+      "structure": ["props interface", "component", "styles"]
+    },
+    "pages": {
+      "location": "src/app",
+      "naming": "kebab-case"
+    }
+  },
+  "prompts": {
+    "defaults": {
+      "tone": "professional",
+      "style": "concise",
+      "format": "typescript"
+    },
+    "templates": {
+      "newComponent": "Create a new React component named {name} with TypeScript and these requirements: {requirements}",
+      "addFeature": "Add a new feature to {component} that does: {description}",
+      "debug": "Debug this issue in {file}: {error}"
+    }
+  },
+  "contextRules": {
+    "includePaths": [
+      "src/**/*.tsx",
+      "src/**/*.ts",
+      "docs/**/*.md",
+      "config/**/*.md"
+    ],
+    "excludePaths": ["node_modules", ".next", "dist"]
+  }
+}

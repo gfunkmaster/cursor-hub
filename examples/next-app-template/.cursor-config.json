@@ -1,0 +1,122 @@
+{
+  "project": {
+    "name": "next-app-template",
+    "type": "next-app",
+    "framework": {
+      "name": "next.js",
+      "version": "14.x",
+      "typescript": true,
+      "features": ["app-router", "server-components", "api-routes"]
+    }
+  },
+  "projectContext": {
+    "includePaths": ["src/**/*", "public/**/*", "*.{json,js,ts}", "README.md"],
+    "excludePaths": [
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/coverage/**",
+      "**/*.test.*"
+    ],
+    "maxContextFiles": 15,
+    "priorityFiles": [
+      "src/app/layout.tsx",
+      "src/app/page.tsx",
+      "src/components/index.ts",
+      "tailwind.config.ts",
+      "next.config.js"
+    ]
+  },
+  "codeStyle": {
+    "typescript": {
+      "strict": true,
+      "target": "ES2022",
+      "module": "ESNext",
+      "jsx": "preserve",
+      "importOrder": [
+        "^(react/(.*)$)|^(react$)",
+        "^(next/(.*)$)|^(next$)",
+        "<THIRD_PARTY_MODULES>",
+        "^@/components/(.*)$",
+        "^@/lib/(.*)$",
+        "^@/styles/(.*)$",
+        "^[./]"
+      ]
+    },
+    "react": {
+      "componentStyle": "functional",
+      "hooks": {
+        "preferCustomHooks": true,
+        "stateManagement": "jotai"
+      },
+      "styling": {
+        "solution": "tailwind",
+        "cssModules": false,
+        "cssInJs": false
+      }
+    },
+    "formatting": {
+      "usePrettier": true,
+      "semi": true,
+      "singleQuote": true,
+      "trailingComma": "es5",
+      "tabWidth": 2,
+      "printWidth": 80
+    }
+  },
+  "aiConfig": {
+    "promptStyle": "detailed",
+    "includeExamples": true,
+    "contextAwareness": {
+      "includeTypes": true,
+      "includeStyles": true,
+      "includeTests": true
+    },
+    "codeGeneration": {
+      "addComments": true,
+      "addPropTypes": true,
+      "addErrorHandling": true,
+      "addAccessibility": true
+    },
+    "testing": {
+      "framework": "vitest",
+      "coverage": true,
+      "component": "@testing-library/react",
+      "e2e": "playwright"
+    }
+  },
+  "conventions": {
+    "components": {
+      "location": "src/components",
+      "structure": {
+        "atoms": "Basic building blocks",
+        "molecules": "Combinations of atoms",
+        "organisms": "Complex UI components",
+        "templates": "Page layouts",
+        "pages": "Route components"
+      }
+    },
+    "state": {
+      "location": "src/store",
+      "atomPattern": "[feature]Atom",
+      "selectorPattern": "use[Feature]"
+    },
+    "api": {
+      "location": "src/app/api",
+      "pattern": "[resource]/route.ts"
+    },
+    "utils": {
+      "location": "src/lib",
+      "categories": ["api", "hooks", "utils", "constants"]
+    }
+  },
+  "documentation": {
+    "components": {
+      "template": "# [ComponentName]\n\n## Overview\n[Description]\n\n## Props\n[PropTable]\n\n## Examples\n[CodeExamples]\n\n## Notes\n[AdditionalNotes]",
+      "propsFormat": "table",
+      "includeTests": true
+    },
+    "api": {
+      "template": "# [EndpointName]\n\n## Method\n[HttpMethod]\n\n## Path\n[Path]\n\n## Request\n[RequestSchema]\n\n## Response\n[ResponseSchema]\n\n## Examples\n[Examples]"
+    }
+  }
+}

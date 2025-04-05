@@ -1,0 +1,108 @@
+{
+  "project": {
+    "name": "cursor-ai-hub",
+    "description": "A comprehensive guide for Cursor AI superusers",
+    "version": "1.0.0",
+    "type": "next-app"
+  },
+  "projectContext": {
+    "includePaths": [
+      "src/**/*",
+      "docs/**/*",
+      "examples/**/*",
+      "*.md",
+      "*.json"
+    ],
+    "excludePaths": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.next/**",
+      "**/coverage/**",
+      "**/*.test.*",
+      "**/*.spec.*"
+    ],
+    "maxContextFiles": 10,
+    "priorityFiles": [
+      "README.md",
+      "docs/*.md",
+      ".cursor-config.json",
+      "src/app/layout.tsx",
+      "src/components/Navigation.tsx"
+    ]
+  },
+  "codeStyle": {
+    "general": {
+      "indentSize": 2,
+      "maxLineLength": 80,
+      "trailingComma": "es5",
+      "bracketSpacing": true,
+      "semi": true
+    },
+    "typescript": {
+      "quotes": "single",
+      "preferArrowFunctions": true,
+      "preferConst": true,
+      "strictNullChecks": true,
+      "noImplicitAny": true
+    },
+    "react": {
+      "componentStyle": "functional",
+      "propsInterface": true,
+      "styleApproach": "tailwind",
+      "preferConstantExport": true
+    }
+  },
+  "docTemplates": {
+    "component": {
+      "include": ["description", "props", "examples", "notes", "accessibility"],
+      "style": "jsdoc",
+      "generateStorybook": true
+    },
+    "function": {
+      "include": ["description", "params", "returns", "examples", "throws"],
+      "style": "tsdoc"
+    },
+    "type": {
+      "include": ["description", "properties", "examples", "constraints"],
+      "style": "tsdoc"
+    }
+  },
+  "aiConfig": {
+    "responseStyle": "concise",
+    "includeExamples": true,
+    "defaultLanguage": "typescript",
+    "autoComplete": {
+      "enabled": true,
+      "triggerCharacters": [".", "(", "[", "{", "\"", "'"],
+      "snippetSuggestions": "inline"
+    },
+    "contextWindow": {
+      "linesBefore": 50,
+      "linesAfter": 20
+    },
+    "promptTemplates": {
+      "newComponent": "Create a new React component named [name] with these features: [features]. Include TypeScript types, styling, and tests.",
+      "addFeature": "Add [feature] to [component] with these requirements: [requirements]. Maintain existing patterns and types.",
+      "refactor": "Refactor [code] to improve [aspect] while maintaining functionality. Consider performance and readability.",
+      "debug": "Debug [issue] in [component]. Current behavior: [current]. Expected: [expected]. Include error handling."
+    }
+  },
+  "conventions": {
+    "components": {
+      "location": "src/components",
+      "naming": "PascalCase",
+      "structure": ["imports", "types", "component", "styles", "exports"]
+    },
+    "pages": {
+      "location": "src/app",
+      "naming": "kebab-case",
+      "structure": ["imports", "types", "page", "exports"]
+    },
+    "hooks": {
+      "location": "src/hooks",
+      "naming": "camelCase",
+      "prefix": "use"
+    }
+  }
+}
