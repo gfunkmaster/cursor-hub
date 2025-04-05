@@ -22,7 +22,7 @@ interface GuideSearchProps {
   guides: NavigationItem[];
 }
 
-export default function GuideSearch({ guides }: GuideSearchProps) {
+export function GuideSearch({ guides }: GuideSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
-import GuideSearch from "./GuideSearch";
+import { GuideSearch } from "./GuideSearch";
 
 interface NavigationItem {
   title: string;
@@ -18,7 +18,7 @@ const mainFeatures: NavigationItem[] = [
     title: "AI Command Center",
     description: "Master Cursor's AI-powered features and commands",
     href: "/ai-features/command-center",
-    icon: "🤖",
+    icon: "🎮",
   },
   {
     title: "AI Chat Interface",
@@ -84,6 +84,18 @@ const mainFeatures: NavigationItem[] = [
 ];
 
 export const guides: NavigationItem[] = [
+  {
+    title: "Quick Start Guide",
+    description: "Get up and running quickly with Cursor AI",
+    href: "/guides/quick-start",
+    icon: "🚀",
+  },
+  {
+    title: "Prompt Engineering",
+    description: "Learn effective prompt engineering techniques for Cursor AI",
+    href: "/guides/prompt-engineering",
+    icon: "🎯",
+  },
   {
     title: "Editor Setup",
     description: "Configure Cursor AI for optimal performance",
@@ -185,6 +197,12 @@ export function Navigation() {
         <div className="h-14 flex items-center justify-between px-4 border-b border-border/40">
           {!isCollapsed ? (
             <Link href="/" className="flex items-center space-x-2">
+              <motion.div
+                className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              />
               <motion.span
                 className="font-bold text-lg text-primary"
                 initial={{ opacity: 0 }}
@@ -195,7 +213,14 @@ export function Navigation() {
               </motion.span>
             </Link>
           ) : (
-            <div />
+            <Link href="/" className="flex items-center justify-center">
+              <motion.div
+                className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              />
+            </Link>
           )}
           <div className="flex items-center gap-2">
             {!isCollapsed && <GuideSearch guides={guides} />}
